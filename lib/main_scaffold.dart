@@ -7,7 +7,7 @@ class MainScaffold extends StatelessWidget {
 
   const MainScaffold({super.key, required this.child});
 
-  static const tabs = ['/screen1', '/screen2', '/screen3'];
+  static const tabs = ['/memories', '/screen2', '/screen3'];
 
   int _locationToTabIndex(String location) {
     final index = tabs.indexWhere((t) => location.startsWith(t));
@@ -22,7 +22,7 @@ class MainScaffold extends StatelessWidget {
     return Scaffold(
       drawer: MainDrawer(),
       appBar: AppBar(
-        title: const Text('Flutter Starter'),
+        title: const Text('Goodbye App'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: child,
@@ -30,7 +30,7 @@ class MainScaffold extends StatelessWidget {
         currentIndex: selectedIndex,
         onTap: (index) => context.go(tabs[index]),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Screen 1'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Memories'),
           BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Screen 2'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Screen 3'),
         ],

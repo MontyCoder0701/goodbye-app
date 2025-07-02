@@ -26,7 +26,7 @@ class MyApp extends ConsumerWidget {
 
     return UpgradeAlert(
       child: MaterialApp.router(
-        title: 'Flutter Starter',
+        title: 'Goodbye App',
         locale: locale,
         themeMode: themeMode,
         theme: CustomTheme.light,

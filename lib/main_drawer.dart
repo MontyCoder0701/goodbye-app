@@ -36,10 +36,10 @@ class MainDrawer extends ConsumerWidget {
           ),
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('Screen 1'),
+            title: const Text('Memories'),
             onTap: () {
               Navigator.pop(context);
-              context.go('/screen1');
+              context.go('/memories');
             },
           ),
           ListTile(

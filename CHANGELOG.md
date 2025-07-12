@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0 (2025-07-12)
+
+
+### Bug Fixes
+
+* add detail page ([59fe602](https://github.com/MontyCoder0701/goodbye-app/commit/59fe60215fb51751bc847386e87abbde46e28435))
+* add first page for memories ([411f644](https://github.com/MontyCoder0701/goodbye-app/commit/411f6444db25483ace5ef3ec134cf6bfa5ff9b39))
+* add models ([48488c3](https://github.com/MontyCoder0701/goodbye-app/commit/48488c38788f78941f7c036fd4f34a67c1d98b4b))
+* apply color theme ([6ddf4a2](https://github.com/MontyCoder0701/goodbye-app/commit/6ddf4a229e80460cf14c7329c6fc3071d485d531))
+
 ## [1.3.0](https://github.com/MontyCoder0701/flutter-starter/compare/v1.2.0...v1.3.0) (2025-05-25)
 
 

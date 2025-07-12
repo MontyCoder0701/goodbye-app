@@ -1,9 +1,10 @@
-import 'package:flutter_starter/screens/memories.dart';
-import 'package:flutter_starter/screens/screen2.dart';
-import 'package:flutter_starter/screens/screen3.dart';
 import 'package:go_router/go_router.dart';
 
+import '/screens/memory_detail.dart';
+import '/screens/screen2.dart';
+import '/screens/screen3.dart';
 import 'main_scaffold.dart';
+import 'screens/memories.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/memories',
@@ -27,6 +28,13 @@ final goRouter = GoRouter(
               const NoTransitionPage(child: Screen3()),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/memories/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return MemoryDetailScreen(id: id);
+      },
     ),
   ],
 );

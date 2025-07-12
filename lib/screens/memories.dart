@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MemoriesScreen extends StatelessWidget {
   const MemoriesScreen({super.key});
@@ -12,7 +13,9 @@ class MemoriesScreen extends StatelessWidget {
         itemCount: 1,
         itemBuilder: (context, index) {
           return InkWell(
-            onTap: () {},
+            onTap: () {
+              context.push('/memories/1');
+            },
             borderRadius: BorderRadius.circular(12),
             child: Card(
               margin: const EdgeInsets.only(bottom: 16),
@@ -28,7 +31,7 @@ class MemoriesScreen extends StatelessWidget {
                     ListTile(
                       contentPadding: EdgeInsets.zero,
                       title: const Text('Dad'),
-                      subtitle: const Text('~ 2025.02.16'),
+                      subtitle: const Text('~ 2025.02.09'),
                       trailing: const Icon(Icons.arrow_forward_ios),
                     ),
                     const SizedBox(height: 12),

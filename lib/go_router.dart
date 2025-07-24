@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '/screens/memory_detail.dart';
 import '/screens/screen2.dart';
 import '/screens/screen3.dart';
+import '/screens/written_memory_detail.dart';
 import 'main_scaffold.dart';
 import 'screens/memories.dart';
 
@@ -30,11 +31,20 @@ final goRouter = GoRouter(
       ],
     ),
     GoRoute(
-      path: '/memories/:id',
+      path: '/memories/:memory_id',
       builder: (context, state) {
-        final id = state.pathParameters['id']!;
-        return MemoryDetailScreen(id: id);
+        final memoryId = state.pathParameters['memory_id']!;
+        return MemoryDetailScreen(memoryId: memoryId);
       },
+      routes: [
+        GoRoute(
+          path: '/item/:item_id',
+          builder: (context, state) {
+            final itemId = state.pathParameters['item_id']!;
+            return WrittenMemoryDetailPage(itemId: itemId);
+          },
+        ),
+      ],
     ),
   ],
 );

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MemoryDetailScreen extends StatelessWidget {
-  final String id;
+  final String memoryId;
 
-  const MemoryDetailScreen({super.key, required this.id});
+  const MemoryDetailScreen({super.key, required this.memoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -98,14 +99,19 @@ class MemoryDetailScreen extends StatelessWidget {
                 childAspectRatio: 1,
               ),
               itemBuilder: (context, i) {
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                    // image: DecorationImage(
-                    //   image: NetworkImage('https://example.com/image_$i.jpg'),
-                    //   fit: BoxFit.cover,
-                    // ),
+                return GestureDetector(
+                  onTap: () {
+                    context.push('/memories/1/item/1');
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                      // image: DecorationImage(
+                      //   image: NetworkImage('https://example.com/image_$i.jpg'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
                   ),
                 );
               },

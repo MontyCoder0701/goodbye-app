@@ -1,19 +1,19 @@
-import 'media_item.model.dart';
-import 'note.model.dart';
+import 'media_memory.model.dart';
+import 'written_memory.model.dart';
 
 class LostPerson {
   final DateTime dateOfDeath;
   final String memorialLocation;
-  final List<MediaItem> photos;
-  final List<MediaItem> videos;
-  final List<Note> notes;
+  final List<MediaMemory> photos;
+  final List<MediaMemory> videos;
+  final List<WrittenMemory> notes;
 
   LostPerson({
     required this.dateOfDeath,
     required this.memorialLocation,
-    List<MediaItem>? photos,
-    List<MediaItem>? videos,
-    List<Note>? notes,
+    List<MediaMemory>? photos,
+    List<MediaMemory>? videos,
+    List<WrittenMemory>? notes,
   }) : photos = photos ?? [],
        videos = videos ?? [],
        notes = notes ?? [];

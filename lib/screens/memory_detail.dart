@@ -85,7 +85,7 @@ class MemoryDetailScreen extends StatelessWidget {
                 );
               },
             ),
-            Text('Texts', style: Theme.of(context).textTheme.titleMedium),
+            Text('Written', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             GridView.builder(
               itemCount: 9,

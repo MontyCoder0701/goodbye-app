@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'base.model.dart';
 import 'media_memory.model.dart';
 import 'written_memory.model.dart';
@@ -5,7 +7,7 @@ import 'written_memory.model.dart';
 class LostPerson extends BaseModel {
   final String name;
   final String? nickname;
-  final DateTime dateOfDeath;
+  final DateTime? dateOfDeath;
   final String? memorialLocation;
   final String? profileImageUrl;
   final List<MediaMemory> photos;
@@ -15,7 +17,7 @@ class LostPerson extends BaseModel {
   LostPerson({
     required this.name,
     this.nickname,
-    required this.dateOfDeath,
+    this.dateOfDeath,
     this.memorialLocation,
     this.profileImageUrl,
     List<MediaMemory>? photos,
@@ -24,4 +26,9 @@ class LostPerson extends BaseModel {
   }) : photos = photos ?? [],
        videos = videos ?? [],
        notes = notes ?? [];
+
+  String get displayName => nickname ?? name;
+
+  String? get displayDateOfDeath =>
+      dateOfDeath != null ? DateFormat.yMMMMd().format(dateOfDeath!) : null;
 }

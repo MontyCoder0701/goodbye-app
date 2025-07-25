@@ -6,7 +6,6 @@ import 'go_router.dart';
 import 'l10n/app_localizations.dart';
 import 'services/local_storage_manager.dart';
 import 'services/providers/locale_provider.dart';
-import 'services/providers/theme_provider.dart';
 import 'theme.dart';
 
 void main() async {
@@ -22,15 +21,12 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
-    final themeMode = ref.watch(themeProvider);
 
     return UpgradeAlert(
       child: MaterialApp.router(
         title: 'Goodbye App',
         locale: locale,
-        themeMode: themeMode,
         theme: CustomTheme.light,
-        darkTheme: CustomTheme.dark,
         routerConfig: goRouter,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,

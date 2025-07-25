@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../models/lost_person.model.dart';
 
@@ -11,6 +10,8 @@ class MemoryDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     final person = LostPerson(
       name: 'Dad',
       dateOfDeath: DateTime(2025, 2, 6),
@@ -18,7 +19,7 @@ class MemoryDetailScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Memories')),
+      appBar: AppBar(title: Text("${person.displayName}'s Memories")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -37,10 +38,23 @@ class MemoryDetailScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         radius: 30,
-                        backgroundColor: Colors.grey,
-                        // backgroundImage: AssetImage('assets/profile.jpg'),
+                        backgroundColor: colorScheme.outline,
+                        backgroundImage:
+                            (person.profileImageUrl != null &&
+                                person.profileImageUrl!.isNotEmpty)
+                            ? NetworkImage(person.profileImageUrl!)
+                            : null,
+                        child:
+                            (person.profileImageUrl == null ||
+                                person.profileImageUrl!.isEmpty)
+                            ? const Icon(
+                                Icons.person,
+                                size: 48,
+                                color: Colors.white,
+                              )
+                            : null,
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -48,33 +62,61 @@ class MemoryDetailScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              person.name,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleLarge?.apply(fontWeightDelta: 2),
+                              person.displayName,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                            SizedBox(height: 4),
-                            Text(
-                              'Date of Passing: ${DateFormat.yMMMMd().format(person.dateOfDeath)}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Memorial Site: ${person.memorialLocation}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
+                            if (person.displayDateOfDeath != null) ...{
+                              SizedBox(height: 4),
+                              Text(
+                                '~ ${person.displayDateOfDeath}',
+                                style: TextStyle(color: colorScheme.tertiary),
+                              ),
+                            },
+                            if (person.memorialLocation != null) ...{
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: colorScheme.tertiary,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    person.memorialLocation!,
+                                    style: TextStyle(
+                                      color: colorScheme.tertiary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            },
                           ],
                         ),
                       ),
-                      const Icon(Icons.arrow_forward_ios, size: 16),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: colorScheme.tertiary,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Photos / Videos',
-              style: Theme.of(context).textTheme.titleMedium,
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Icon(Icons.photo_library),
+                const SizedBox(width: 8),
+                Text(
+                  'Photos / Videos',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             GridView.builder(
@@ -95,7 +137,7 @@ class MemoryDetailScreen extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[300],
+                      color: colorScheme.outline,
                       // image: DecorationImage(
                       //   image: NetworkImage('https://example.com/image_$i.jpg'),
                       //   fit: BoxFit.cover,
@@ -105,7 +147,17 @@ class MemoryDetailScreen extends StatelessWidget {
                 );
               },
             ),
-            Text('Written', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Icon(Icons.edit_note),
+                const SizedBox(width: 8),
+                Text(
+                  'Written',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                ),
+              ],
+            ),
             const SizedBox(height: 12),
             GridView.builder(
               itemCount: 9,
@@ -125,7 +177,7 @@ class MemoryDetailScreen extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[300],
+                      color: colorScheme.outline,
                       // image: DecorationImage(
                       //   image: NetworkImage('https://example.com/image_$i.jpg'),
                       //   fit: BoxFit.cover,

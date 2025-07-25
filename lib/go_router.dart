@@ -1,13 +1,11 @@
 import 'package:go_router/go_router.dart';
 
-import '/screens/lost_person_detail.dart';
-import '/screens/media_memory_detail.dart';
-import '/screens/memory_detail.dart';
-import '/screens/screen2.dart';
-import '/screens/screen3.dart';
-import '/screens/written_memory_detail.dart';
 import 'main_scaffold.dart';
+import 'screens/lost_person_detail.dart';
+import 'screens/media_memory_detail.dart';
 import 'screens/memories.dart';
+import 'screens/memory_detail.dart';
+import 'screens/written_memory_detail.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/memories',
@@ -19,16 +17,6 @@ final goRouter = GoRouter(
           path: '/memories',
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: MemoriesScreen()),
-        ),
-        GoRoute(
-          path: '/screen2',
-          pageBuilder: (context, state) =>
-              const NoTransitionPage(child: Screen2()),
-        ),
-        GoRoute(
-          path: '/screen3',
-          pageBuilder: (context, state) =>
-              const NoTransitionPage(child: Screen3()),
         ),
       ],
     ),

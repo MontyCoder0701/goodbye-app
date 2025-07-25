@@ -16,6 +16,8 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: EdgeInsets.only(
         top: 24,
@@ -28,61 +30,97 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Add Someone To Remember',
-                style: TextStyle(fontSize: 18),
+              Center(
+                child: Text(
+                  'Someone To Remember',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(
+                  label: Text(
+                    'Name *',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 16,
+                    ),
+                  ),
+                  prefixIcon: const Icon(Icons.person),
+                ),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Required' : null,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _locationController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Memorial Location',
+                  prefixIcon: const Icon(Icons.location_on),
                 ),
               ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _dateOfDeath == null
-                          ? 'Select Date of Passing'
-                          : 'Date: ${DateFormat.yMMMMd().format(_dateOfDeath!)}',
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final now = DateTime.now();
-                      final picked = await showDatePicker(
-                        context: context,
-                        initialDate: now,
-                        firstDate: DateTime(1900),
-                        lastDate: now,
-                      );
-                      if (picked != null) {
-                        setState(() => _dateOfDeath = picked);
-                      }
-                    },
-                    child: const Text('Pick Date'),
-                  ),
-                ],
+              const SizedBox(height: 24),
+              Text(
+                'Date of Passing',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate() &&
-                      _dateOfDeath != null) {
-                    Navigator.pop(context);
+              const SizedBox(height: 8),
+              InkWell(
+                onTap: () async {
+                  final now = DateTime.now();
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: now,
+                    firstDate: DateTime(1900),
+                    lastDate: now,
+                  );
+                  if (picked != null) {
+                    setState(() => _dateOfDeath = picked);
                   }
                 },
-                child: const Text('Save'),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: colorScheme.outline),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_today, size: 20),
+                      const SizedBox(width: 12),
+                      Text(
+                        _dateOfDeath == null
+                            ? 'Select a date'
+                            : DateFormat.yMMMMd().format(_dateOfDeath!),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: const Icon(Icons.check),
+                  label: const Text('Save'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                ),
               ),
             ],
           ),

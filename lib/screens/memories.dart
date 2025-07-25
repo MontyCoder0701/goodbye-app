@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '/main_drawer.dart';
 import '/screens/create_lost_person.modal.dart';
+import '../models/lost_person.model.dart';
 
 class MemoriesScreen extends StatelessWidget {
   const MemoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final person = LostPerson(
+      name: 'Dad',
+      dateOfDeath: DateTime(2025, 2, 6),
+      memorialLocation: '함백산 추모공원 9-5-182',
+    );
+
     return Scaffold(
+      drawer: MainDrawer(),
       appBar: AppBar(title: const Text('Memories')),
-      body: ListView.builder(
+      body: ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(height: 20),
         padding: const EdgeInsets.all(16),
-        itemCount: 1,
+        itemCount: 3,
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
@@ -20,8 +32,8 @@ class MemoriesScreen extends StatelessWidget {
             },
             borderRadius: BorderRadius.circular(12),
             child: Card(
-              margin: const EdgeInsets.only(bottom: 16),
-              elevation: 4,
+              elevation: 3,
+              shadowColor: colorScheme.outline,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -32,9 +44,38 @@ class MemoriesScreen extends StatelessWidget {
                   children: [
                     ListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Dad'),
-                      subtitle: const Text('~ 2025.02.09'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
+                      leading: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: colorScheme.outline,
+                        backgroundImage: person.profileImageUrl != null
+                            ? NetworkImage(person.profileImageUrl!)
+                            : null,
+                        child: person.profileImageUrl == null
+                            ? const Icon(
+                                Icons.person,
+                                size: 48,
+                                color: Colors.white,
+                              )
+                            : null,
+                      ),
+                      title: Text(
+                        person.displayName,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      subtitle: person.displayDateOfDeath != null
+                          ? Text(
+                              '~ ${person.displayDateOfDeath}',
+                              style: TextStyle(color: colorScheme.tertiary),
+                            )
+                          : null,
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: colorScheme.tertiary,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     GridView.builder(
@@ -52,7 +93,7 @@ class MemoriesScreen extends StatelessWidget {
                         return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey[300],
+                            color: colorScheme.outline,
                             // TODO: add image
                             // image: DecorationImage(
                             //   image: AssetImage('assets/sample_image.jpg'),

@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 
+import '/screens/lost_person_detail.dart';
+import '/screens/media_memory_detail.dart';
 import '/screens/memory_detail.dart';
 import '/screens/screen2.dart';
 import '/screens/screen3.dart';
@@ -31,17 +33,30 @@ final goRouter = GoRouter(
       ],
     ),
     GoRoute(
-      path: '/memories/:memory_id',
+      path: '/lost_person/:lost_person_id',
       builder: (context, state) {
-        final memoryId = state.pathParameters['memory_id']!;
-        return MemoryDetailScreen(memoryId: memoryId);
+        final lostPersonId = state.pathParameters['lost_person_id']!;
+        return LostPersonDetailScreen(lostPersonId: lostPersonId);
       },
       routes: [
+        GoRoute(
+          path: '/memories',
+          builder: (context, state) {
+            final lostPersonId = state.pathParameters['lost_person_id']!;
+            return MemoryDetailScreen(lostPersonId: lostPersonId);
+          },
+        ),
         GoRoute(
           path: '/item/:item_id',
           builder: (context, state) {
             final itemId = state.pathParameters['item_id']!;
-            return WrittenMemoryDetailPage(itemId: itemId);
+            final itemType = state.uri.queryParameters['item_type'] ?? '';
+            switch (itemType) {
+              case 'written':
+                return WrittenMemoryDetailPage(itemId: itemId);
+              default:
+                return MediaMemoryDetailPage(itemId: itemId);
+            }
           },
         ),
       ],

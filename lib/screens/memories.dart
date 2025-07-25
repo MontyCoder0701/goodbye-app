@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '/screens/create_lost_person.modal.dart';
+
 class MemoriesScreen extends StatelessWidget {
   const MemoriesScreen({super.key});
 
@@ -14,7 +16,7 @@ class MemoriesScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
-              context.push('/memories/1');
+              context.push('/lost_person/1/memories');
             },
             borderRadius: BorderRadius.circular(12),
             child: Card(
@@ -68,8 +70,17 @@ class MemoriesScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {},
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) => const CreateLostPersonModal(),
+          );
+        },
       ),
     );
   }

@@ -31,4 +31,7 @@ class LostPerson extends BaseModel {
 
   String? get displayDateOfDeath =>
       dateOfDeath != null ? DateFormat.yMMMMd().format(dateOfDeath!) : null;
+
+  bool get hasMemories =>
+      photos.isNotEmpty || videos.isNotEmpty || notes.isNotEmpty;
 }

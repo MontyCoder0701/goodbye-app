@@ -3,10 +3,73 @@ import 'package:go_router/go_router.dart';
 
 import '../models/lost_person.model.dart';
 
-class MemoryDetailScreen extends StatelessWidget {
+class MemoryDetailScreen extends StatefulWidget {
   final String lostPersonId;
+  final bool openModalOnLoad;
 
-  const MemoryDetailScreen({super.key, required this.lostPersonId});
+  const MemoryDetailScreen({
+    super.key,
+    required this.lostPersonId,
+    this.openModalOnLoad = false,
+  });
+
+  @override
+  State<MemoryDetailScreen> createState() => _MemoryDetailScreenState();
+}
+
+class _MemoryDetailScreenState extends State<MemoryDetailScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.openModalOnLoad) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAddMemoryModal();
+      });
+    }
+  }
+
+  void _showAddMemoryModal() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo),
+                title: const Text('Upload Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: handle image upload
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.videocam),
+                title: const Text('Upload Video'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: handle video upload
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.contact_page_outlined),
+                title: const Text('Upload a Written Memory'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: navigate to write screen
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +126,13 @@ class MemoryDetailScreen extends StatelessWidget {
                           children: [
                             Text(
                               person.displayName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             if (person.displayDateOfDeath != null) ...{
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 '~ ${person.displayDateOfDeath}',
                                 style: TextStyle(color: colorScheme.tertiary),
@@ -110,129 +173,97 @@ class MemoryDetailScreen extends StatelessWidget {
             const SizedBox(height: 30),
             Row(
               children: [
-                Icon(Icons.photo_library),
+                const Icon(Icons.photo_library),
                 const SizedBox(width: 8),
-                Text(
+                const Text(
                   'Photos / Videos',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            GridView.builder(
-              itemCount: 9,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                childAspectRatio: 1,
+            if (person.photos.isEmpty && person.videos.isEmpty) ...{
+              Text(
+                'No Photos or Videos',
+                style: TextStyle(color: colorScheme.tertiary),
               ),
-              itemBuilder: (context, i) {
-                return GestureDetector(
-                  onTap: () {
-                    context.push('/lost_person/1/item/1?item_type=media');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: colorScheme.outline,
-                      // image: DecorationImage(
-                      //   image: NetworkImage('https://example.com/image_$i.jpg'),
-                      //   fit: BoxFit.cover,
-                      // ),
+            },
+            if (person.photos.isNotEmpty || person.videos.isNotEmpty) ...{
+              GridView.builder(
+                itemCount: 9,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1,
+                ),
+                itemBuilder: (context, i) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/lost_person/1/item/1?item_type=media');
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: colorScheme.outline,
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
+                  );
+                },
+              ),
+            },
+            const SizedBox(height: 30),
             Row(
               children: [
-                Icon(Icons.edit_note),
+                const Icon(Icons.edit_note),
                 const SizedBox(width: 8),
-                Text(
+                const Text(
                   'Written',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            GridView.builder(
-              itemCount: 9,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-                childAspectRatio: 1,
+            if (person.notes.isEmpty) ...{
+              Text(
+                'No Written Memories',
+                style: TextStyle(color: colorScheme.tertiary),
               ),
-              itemBuilder: (context, i) {
-                return GestureDetector(
-                  onTap: () {
-                    context.push('/lost_person/1/item/1?item_type=written');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: colorScheme.outline,
-                      // image: DecorationImage(
-                      //   image: NetworkImage('https://example.com/image_$i.jpg'),
-                      //   fit: BoxFit.cover,
-                      // ),
+            },
+            if (person.notes.isNotEmpty) ...{
+              GridView.builder(
+                itemCount: 9,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1,
+                ),
+                itemBuilder: (context, i) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/lost_person/1/item/1?item_type=written');
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: colorScheme.outline,
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 80),
+                  );
+                },
+              ),
+            },
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: _showAddMemoryModal,
         child: const Icon(Icons.add),
-        onPressed: () => showModalBottomSheet(
-          context: context,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-          ),
-          builder: (context) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.photo),
-                    title: const Text('Upload Photo'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // TODO: handle image upload
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.videocam),
-                    title: const Text('Upload Video'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // TODO: handle video upload
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.contact_page_outlined),
-                    title: const Text('Upload a Written Memory'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // TODO: navigate to write screen
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
       ),
     );
   }

@@ -31,7 +31,12 @@ final goRouter = GoRouter(
           path: '/memories',
           builder: (context, state) {
             final lostPersonId = state.pathParameters['lost_person_id']!;
-            return MemoryDetailScreen(lostPersonId: lostPersonId);
+            final openModalOnLoad =
+                state.uri.queryParameters['open_modal'] == 'true';
+            return MemoryDetailScreen(
+              lostPersonId: lostPersonId,
+              openModalOnLoad: openModalOnLoad,
+            );
           },
         ),
         GoRoute(

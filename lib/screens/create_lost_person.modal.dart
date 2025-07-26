@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../models/lost_person.model.dart';
+
 class CreateLostPersonModal extends StatefulWidget {
-  const CreateLostPersonModal({super.key});
+  final void Function(LostPerson) onCreated;
+
+  const CreateLostPersonModal({super.key, required this.onCreated});
 
   @override
   State<CreateLostPersonModal> createState() => _CreateLostPersonModalState();
@@ -13,6 +18,27 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
   final _nameController = TextEditingController();
   final _locationController = TextEditingController();
   DateTime? _dateOfDeath;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+
+  void _handleSave() {
+    if (_formKey.currentState!.validate()) {
+      final person = LostPerson(
+        name: _nameController.text,
+        dateOfDeath: _dateOfDeath,
+        memorialLocation: _locationController.text,
+      );
+
+      widget.onCreated(person);
+      Navigator.pop(context);
+      context.push('/lost_person/1/memories?open_modal=true');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +71,7 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
                   label: Text(
                     'Name *',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: colorScheme.onSurface,
                       fontSize: 16,
                     ),
                   ),
@@ -57,15 +83,18 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _locationController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Memorial Location',
-                  prefixIcon: const Icon(Icons.location_on),
+                  prefixIcon: Icon(Icons.location_on),
                 ),
               ),
               const SizedBox(height: 24),
               Text(
                 'Date of Passing',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 8),
               InkWell(
@@ -94,13 +123,13 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today, size: 20),
+                      const Icon(Icons.calendar_today, size: 20),
                       const SizedBox(width: 12),
                       Text(
                         _dateOfDeath == null
                             ? 'Select a date'
                             : DateFormat.yMMMMd().format(_dateOfDeath!),
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
@@ -110,11 +139,7 @@ class _CreateLostPersonModalState extends State<CreateLostPersonModal> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.pop(context);
-                    }
-                  },
+                  onPressed: _handleSave,
                   icon: const Icon(Icons.check),
                   label: const Text('Save'),
                   style: ElevatedButton.styleFrom(
